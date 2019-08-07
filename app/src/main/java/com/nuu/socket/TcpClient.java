@@ -34,7 +34,7 @@ public class TcpClient extends PduUtil implements Runnable {
     }
 
     private static final int SOCKET_BUFFER_SIZE = 500 * 1024; //500KB
-    private static final int HEART_BEAT_INTERVAL = 15;//心跳间隔单位为秒
+    private static final int HEART_BEAT_INTERVAL = 30;//5 * 60;  //心跳间隔5分钟，单位为秒
     private static final int MAX_HEARTBEAT = 1;  //最大的心跳丢失次数
 
     private ScheduledExecutorService heartBeatScheduled;
@@ -43,6 +43,7 @@ public class TcpClient extends PduUtil implements Runnable {
 
     private boolean isLogin = false;
 
+    private int mSeqNum = 1; //服务器发送notify消息，SeqNum默认为0
     private int heartBeatCount = 0;
 
     private final Context mContext;
@@ -73,7 +74,7 @@ public class TcpClient extends PduUtil implements Runnable {
     /**
      * 协议消息派发
      */
-    private final ConcurrentHashMap<Short, ReceiveListener> mCommonListener;
+    private final ConcurrentHashMap<Integer, ReceiveListener> mCommonListener;
 
 
     /**
@@ -156,7 +157,9 @@ public class TcpClient extends PduUtil implements Runnable {
     public synchronized void sendProto(GeneratedMessageV3 msg, short msgType,
                                        ReceiveListener callback) {
         PduBase pduBase = new PduBase();
+        int seq_num = getSeqNum();
 
+        pduBase.seq_id = seq_num;
         pduBase.msgType = msgType;
         pduBase.length = (short) msg.getSerializedSize();
         pduBase.body = msg.toByteArray();
@@ -165,11 +168,19 @@ public class TcpClient extends PduUtil implements Runnable {
 
         Log.d(TAG, "length:" + pduBase.length);
         if (callback != null) {
-            mCommonListener.put(key, callback);
+            mCommonListener.put(seq_num, callback);
         }
         sendPdu(pduBase);
     }
 
+    /**
+     * mSeqNum 线程安全
+     *
+     * @return int
+     */
+    private synchronized int getSeqNum() {
+        return mSeqNum++;
+    }
 
     public void setNotifyListener(NotifyListener listener) {
         for (int i = 0; i < mNotifyListener.size(); i++) {
@@ -271,9 +282,9 @@ public class TcpClient extends PduUtil implements Runnable {
 
     @Override
     public void OnRec(final PduBase pduBase) {
+        final int key = pduBase.seq_id;
         final byte ver = (byte) ((pduBase.msgType >> 12) & 0x000F);
         final byte cate = (byte) ((pduBase.msgType >> 8) & 0x000F);
-        final short key = (short) (pduBase.msgType & 0x00FF);
 
         String log = "tcp rec ver:" + ver + "& tcp rec cate:" + cate + "& tcp rec commandId:" + key;
         Log.d(TAG, log);
