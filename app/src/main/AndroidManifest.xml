@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.nuu.nuuinfo">
+
+    <!-- 需要和系统签名一致 -->
+    <!-- android:sharedUserId="android.uid.system"> -->
+
+    <!-- System Permissions begin -->
+    <uses-permission
+        android:name="android.permission.INSTALL_PACKAGES"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <!-- System Permissions end -->
+
+    <!-- Normal Permissions begin -->
+    <uses-permission android:name="android.Manifest.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Dangerous Permissions start -->
+    <!-- STORAGE -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!--CAMERA-->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- Dangerous Permissions end-->
+
+
+    <application
+        android:name=".MiFiApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.NoTitleBar">
+
+        <activity
+            android:name="com.nuu.nuuinfo.MainActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="www.recipe-app.com"
+                    android:pathPattern="/recipe"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="com.nuu.service.NuuService"
+            android:enabled="true"
+            android:exported="false"
+            android:persistent="true">
+            <intent-filter>
+                <action android:name="com.nuu.service.BOOT_SERVICE" />
+                <action android:name="com.nuu.service.REPORT_DEVICE_AM" />
+                <action android:name="com.nuu.service.OBTAIN_DEVICE_AM" />
+                <action android:name="com.nuu.service.CLEAR_LOG_FILE" />
+                <action android:name="com.nuu.service.LOAD_CONFIG" />
+            </intent-filter>
+        </service>
+
+    </application>
+
+</manifest>
