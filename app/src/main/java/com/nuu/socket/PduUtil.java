@@ -29,7 +29,7 @@ public abstract class PduUtil {
                 buffer.get(packByte);
                 PduBase pduBase = buildPdu(packByte);
                 buffer.compact();//compact()方法只会清除已经读过的数据
-                //read to read.
+                //ready to read.
                 buffer.flip();  //准备从缓冲区中读取数据
 
                 if (pduBase != null) {
@@ -70,9 +70,11 @@ public abstract class PduUtil {
 
         short msgType = buffer.getShort();
         short length = buffer.getShort();
+        int seqId = buffer.getInt();
 
         units.msgType = msgType;
         units.length = length;
+        units.seq_id = seqId;
 
         Log.d(TAG, "tcp rec package params Length:" + length);
 
@@ -90,6 +92,7 @@ public abstract class PduUtil {
         byteBuffer.order(ByteOrder.BIG_ENDIAN);
         byteBuffer.putShort(req.msgType);
         byteBuffer.putShort(req.length);
+        byteBuffer.putInt(req.seq_id);
         if (req.body != null) {
             byteBuffer.put(req.body);
         }
