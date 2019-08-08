@@ -3,6 +3,7 @@ package com.nuu.socket;
 import android.util.Log;
 
 
+import com.nuu.config.AppConfig;
 import com.nuu.nuuinfo.BuildConfig;
 import com.nuu.util.HexUtil;
 import com.nuu.utils.DESCrypt;
@@ -79,15 +80,15 @@ public abstract class PduUtil {
 
         Log.d(TAG, "tcp rec package params Length:" + length);
 
-        /*if (length > 0) {
-            units.body = new byte[length];
-            buffer.get(units.body);
-        }*/
-
         if (length > 0) {
-            byte[] data = new byte[length];
-            buffer.get(data);
-            units.body = DESCrypt.instance().decrypt(data);
+            if (AppConfig.isEncry) {
+                byte[] data = new byte[length];
+                buffer.get(data);
+                units.body = DESCrypt.instance().decrypt(data);
+            } else {
+                units.body = new byte[length];
+                buffer.get(units.body);
+            }
         }
 
         return units;
@@ -95,25 +96,34 @@ public abstract class PduUtil {
 
 
     public ByteBuffer serializePdu(PduBase req) {
-        ByteBuffer byteBuffer = ByteBuffer.allocate(PduBase.PDU_HEADER_LENGTH + req.length);
-        byteBuffer.order(ByteOrder.BIG_ENDIAN);
+        ByteBuffer byteBuffer;
+        if (AppConfig.isEncry) {
+            if (req.body != null) {
+                byte[] data = DESCrypt.instance().encrypt(req.body);
+                byteBuffer = ByteBuffer.allocate(PduBase.PDU_HEADER_LENGTH + data.length);
+                byteBuffer.order(ByteOrder.BIG_ENDIAN);
+                byteBuffer.putShort(req.commandId);
+                byteBuffer.putShort((short) data.length);
+                byteBuffer.putInt(req.seqId);
+                byteBuffer.put(data);
+            } else {
+                byteBuffer = ByteBuffer.allocate(PduBase.PDU_HEADER_LENGTH);
+                byteBuffer.order(ByteOrder.BIG_ENDIAN);
+                byteBuffer.putShort(req.commandId);
+                byteBuffer.putShort((short) 0);
+                byteBuffer.putInt(req.seqId);
+            }
 
-        /*byteBuffer.putShort(req.commandId);
-        byteBuffer.putShort(req.length);
-        byteBuffer.putInt(req.seqId);
-        if (req.body != null) {
-            byteBuffer.put(req.body);
-        }*/
-
-        byteBuffer.putShort(req.commandId);
-        if (req.body != null) {
-            byte[] data = DESCrypt.instance().encrypt(req.body);
-            byteBuffer.putShort((short) data.length);
-            byteBuffer.putInt(req.seqId);
-            byteBuffer.put(data);
         } else {
-            byteBuffer.putShort((short) 0);
+            byteBuffer = ByteBuffer.allocate(PduBase.PDU_HEADER_LENGTH + req.length);
+            byteBuffer.order(ByteOrder.BIG_ENDIAN);
+
+            byteBuffer.putShort(req.commandId);
+            byteBuffer.putShort(req.length);
             byteBuffer.putInt(req.seqId);
+            if (req.body != null) {
+                byteBuffer.put(req.body);
+            }
         }
         return byteBuffer;
 
