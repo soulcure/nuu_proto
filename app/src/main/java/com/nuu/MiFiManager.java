@@ -243,12 +243,12 @@ public class MiFiManager {
     }
 
 
-    private void waitBindingProto(final GeneratedMessageV3 msg, final short msgType,
+    private void waitBindingProto(final GeneratedMessageV3 msg, final short commandId,
                                   final ReceiveListener callback) {
         init(mContext, new InitListener() {
             @Override
             public void success() {
-                nuuService.sendProto(msg, msgType, callback);
+                nuuService.sendProto(msg, commandId, callback);
             }
 
 
@@ -278,16 +278,16 @@ public class MiFiManager {
     /**
      * 发送socket协议
      *
-     * @param msgType  命令码
+     * @param commandId  命令码
      * @param callback 数据
      */
-    public void sendProto(GeneratedMessageV3 msg, short msgType,
+    public void sendProto(GeneratedMessageV3 msg, short commandId,
                           ReceiveListener callback) {
         if (mContext != null) {
             if (binded == BIND_STATUS.BINDED) {
-                nuuService.sendProto(msg, msgType, callback);
+                nuuService.sendProto(msg, commandId, callback);
             } else {
-                waitBindingProto(msg, msgType, callback);
+                waitBindingProto(msg, commandId, callback);
             }
         } else {
             throw new IllegalStateException("nuu manager no init");

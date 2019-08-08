@@ -56,12 +56,12 @@ public class NuuService extends Service {
          * 发送socket协议
          *
          * @param msg      消息体
-         * @param msgType  发送命令码
+         * @param commandId  发送命令码
          * @param callback 回调
          */
-        public void sendProto(GeneratedMessageV3 msg, short msgType,
+        public void sendProto(GeneratedMessageV3 msg, short commandId,
                               ReceiveListener callback) {
-            mClient.sendProto(msg, msgType, callback);
+            mClient.sendProto(msg, commandId, callback);
         }
 
         public void setNotifyListener(NotifyListener listener) {
