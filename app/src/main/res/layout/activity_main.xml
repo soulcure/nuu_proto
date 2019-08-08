@@ -36,40 +36,47 @@
 
 
         <Button
-            android:id="@+id/btn_install"
+            android:id="@+id/btn_sim_card_req"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="app install" />
+            android:text="GetSimCardReq" />
 
         <Button
-            android:id="@+id/btn_pm"
+            android:id="@+id/btn_sim_data_req"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="pm install" />
+            android:text="GetSimDataReq" />
 
         <Button
-            android:id="@+id/btn_reboot"
+            android:id="@+id/btn_release_sim_card_req"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="reboot" />
+            android:text="ReleaseSimCardReq" />
 
         <Button
-            android:id="@+id/btn_close"
+            android:id="@+id/btn_sim_auth_req"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="close tcp" />
+            android:text="SimAuthReq" />
 
 
         <Button
-            android:id="@+id/btn_test"
+            android:id="@+id/btn_report_req"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="test" />
+            android:text="ReportReq" />
+
+        <Button
+            android:id="@+id/btn_force_release_sim_card_req"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="ForceReleaseSimCardReq" />
 
     </LinearLayout>
 </ScrollView>
