@@ -81,7 +81,7 @@ public abstract class PduUtil {
         Log.d(TAG, "tcp rec package params Length:" + length);
 
         if (length > 0) {
-            if (AppConfig.isEncry) {
+            if (AppConfig.isEncryption) {
                 byte[] data = new byte[length];
                 buffer.get(data);
                 units.body = DESCrypt.instance().decrypt(data);
@@ -97,7 +97,7 @@ public abstract class PduUtil {
 
     public ByteBuffer serializePdu(PduBase req) {
         ByteBuffer byteBuffer;
-        if (AppConfig.isEncry) {
+        if (AppConfig.isEncryption) {
             if (req.body != null) {
                 byte[] data = DESCrypt.instance().encrypt(req.body);
                 byteBuffer = ByteBuffer.allocate(PduBase.PDU_HEADER_LENGTH + data.length);

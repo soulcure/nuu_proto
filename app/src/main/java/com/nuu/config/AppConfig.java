@@ -10,7 +10,7 @@ public class AppConfig {
     /**
      * 充电桩是否启用加密
      */
-    public static final boolean isEncry = true;
+    public static final boolean isEncryption = true;
 
     /**
      * HuXin 服务器连接配置
