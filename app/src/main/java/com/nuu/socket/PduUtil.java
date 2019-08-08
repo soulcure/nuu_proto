@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.nuu.nuuinfo.BuildConfig;
 import com.nuu.util.HexUtil;
+import com.nuu.utils.DESCrypt;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -78,9 +79,15 @@ public abstract class PduUtil {
 
         Log.d(TAG, "tcp rec package params Length:" + length);
 
-        if (length > 0) {
+        /*if (length > 0) {
             units.body = new byte[length];
             buffer.get(units.body);
+        }*/
+
+        if (length > 0) {
+            byte[] data = new byte[length];
+            buffer.get(data);
+            units.body = DESCrypt.instance().decrypt(data);
         }
 
         return units;
@@ -90,11 +97,23 @@ public abstract class PduUtil {
     public ByteBuffer serializePdu(PduBase req) {
         ByteBuffer byteBuffer = ByteBuffer.allocate(PduBase.PDU_HEADER_LENGTH + req.length);
         byteBuffer.order(ByteOrder.BIG_ENDIAN);
-        byteBuffer.putShort(req.commandId);
+
+        /*byteBuffer.putShort(req.commandId);
         byteBuffer.putShort(req.length);
         byteBuffer.putInt(req.seqId);
         if (req.body != null) {
             byteBuffer.put(req.body);
+        }*/
+
+        byteBuffer.putShort(req.commandId);
+        if (req.body != null) {
+            byte[] data = DESCrypt.instance().encrypt(req.body);
+            byteBuffer.putShort((short) data.length);
+            byteBuffer.putInt(req.seqId);
+            byteBuffer.put(data);
+        } else {
+            byteBuffer.putShort((short) 0);
+            byteBuffer.putInt(req.seqId);
         }
         return byteBuffer;
 
