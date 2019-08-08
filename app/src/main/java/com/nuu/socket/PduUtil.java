@@ -68,13 +68,13 @@ public abstract class PduUtil {
             buffer.flip();
         }
 
-        short msgType = buffer.getShort();
+        short commandId = buffer.getShort();
         short length = buffer.getShort();
         int seqId = buffer.getInt();
 
-        units.msgType = msgType;
+        units.commandId = commandId;
         units.length = length;
-        units.seq_id = seqId;
+        units.seqId = seqId;
 
         Log.d(TAG, "tcp rec package params Length:" + length);
 
@@ -90,9 +90,9 @@ public abstract class PduUtil {
     public ByteBuffer serializePdu(PduBase req) {
         ByteBuffer byteBuffer = ByteBuffer.allocate(PduBase.PDU_HEADER_LENGTH + req.length);
         byteBuffer.order(ByteOrder.BIG_ENDIAN);
-        byteBuffer.putShort(req.msgType);
+        byteBuffer.putShort(req.commandId);
         byteBuffer.putShort(req.length);
-        byteBuffer.putInt(req.seq_id);
+        byteBuffer.putInt(req.seqId);
         if (req.body != null) {
             byteBuffer.put(req.body);
         }

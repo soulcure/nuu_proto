@@ -1,8 +1,8 @@
 package com.nuu.socket;
 
 /**
- * 命令码      包体长度    包体参数
- * 2Bytes	    2Bytes	   NByte
+ * 命令码      包体长度    协议序号  包体参数
+ * 2Bytes	    2Bytes	   4Bytes   NByte
  */
 public class PduBase {
 
@@ -15,7 +15,7 @@ public class PduBase {
     /****************************************************
      * index 0. pos:[0-2) 命令码
      */
-    public short msgType;
+    public short commandId;
 
     /****************************************************
      * index 1. pos:[2-4) 参数长度
@@ -26,7 +26,7 @@ public class PduBase {
     /****************************************************
      * index 4. pos:[4-8)
      */
-    public int seq_id;
+    public int seqId;
 
 
     /****************************************************

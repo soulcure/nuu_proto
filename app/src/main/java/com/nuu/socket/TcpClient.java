@@ -154,21 +154,19 @@ public class TcpClient extends PduUtil implements Runnable {
      * @param msg      消息体
      * @param callback 回调
      */
-    public synchronized void sendProto(GeneratedMessageV3 msg, short msgType,
+    public synchronized void sendProto(GeneratedMessageV3 msg, short commandId,
                                        ReceiveListener callback) {
         PduBase pduBase = new PduBase();
-        int seq_num = getSeqNum();
+        int seqNum = getSeqNum();
 
-        pduBase.seq_id = seq_num;
-        pduBase.msgType = msgType;
+        pduBase.seqId = seqNum;
+        pduBase.commandId = commandId;
         pduBase.length = (short) msg.getSerializedSize();
         pduBase.body = msg.toByteArray();
 
-        short key = (short) (msgType & 0x00FF);
-
         Log.d(TAG, "length:" + pduBase.length);
         if (callback != null) {
-            mCommonListener.put(seq_num, callback);
+            mCommonListener.put(seqNum, callback);
         }
         sendPdu(pduBase);
     }
@@ -282,9 +280,9 @@ public class TcpClient extends PduUtil implements Runnable {
 
     @Override
     public void OnRec(final PduBase pduBase) {
-        final int key = pduBase.seq_id;
-        final byte ver = (byte) ((pduBase.msgType >> 12) & 0x000F);
-        final byte cate = (byte) ((pduBase.msgType >> 8) & 0x000F);
+        final int key = pduBase.seqId;
+        final byte ver = (byte) ((pduBase.commandId >> 12) & 0x000F);
+        final byte cate = (byte) ((pduBase.commandId >> 8) & 0x000F);
 
         String log = "tcp rec ver:" + ver + "& tcp rec cate:" + cate + "& tcp rec commandId:" + key;
         Log.d(TAG, log);
@@ -310,7 +308,7 @@ public class TcpClient extends PduUtil implements Runnable {
     @Override
     public void OnCallback(PduBase pduBase) {
         for (NotifyListener item : mNotifyListener) {
-            if (item.getCommandId() == pduBase.msgType) {
+            if (item.getCommandId() == pduBase.commandId) {
                 item.OnRec(pduBase.body);
                 break;
             }
