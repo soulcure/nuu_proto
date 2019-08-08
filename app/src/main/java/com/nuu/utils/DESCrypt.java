@@ -13,7 +13,7 @@ public final class DESCrypt {
     private static final String TAG = "TcpClient";
 
     private static final String Algorithm = "DESede";
-    private static final String DES_MODE = "DESede/ECB/PKCS5Padding";   //"DES/ECB/NoPadding" ,"DES/ECB/PKCS5Padding"
+    private static final String DES_MODE = "DESede/ECB/PKCS5Padding";   //"DESede/ECB/NoPadding" ,"DESede/ECB/PKCS5Padding"
 
     private byte[] keyCode;
 

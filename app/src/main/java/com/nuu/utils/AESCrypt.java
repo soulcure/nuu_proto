@@ -23,7 +23,7 @@ public final class AESCrypt {
     private static final String AES_KEY_STR = "Y39rL18flE6H9fLbbuM9cJYi";  //AES key
 
     private static final String Algorithm = "AES";
-    private static final String AES_MODE = "AES/CBC/PKCS5Padding"; //the default cipher for AES is AES/ECB/PKCS5Padding
+    private static final String AES_MODE = "AES/CBC/PKCS5Padding"; //"AES/CBC/NoPadding"  "AES/CBC/PKCS5Padding"
 
     private static AESCrypt instance;
 
