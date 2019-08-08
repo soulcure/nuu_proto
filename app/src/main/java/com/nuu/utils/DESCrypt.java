@@ -27,8 +27,7 @@ public final class DESCrypt {
     }
 
     private DESCrypt() {
-        keyCode = "1234567800000000".getBytes();
-        //keyCode = "12345678".getBytes();
+        keyCode = "123456781234567812345678".getBytes();
     }
 
     public byte[] encrypt(byte[] byteContent) {

@@ -284,7 +284,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
     private void desTest() {
-        String content = "12345678";
+        String content = "ABCDEFG";
 
         Log.d(TAG, "DESCrypt decrypt before:" + content);
 
