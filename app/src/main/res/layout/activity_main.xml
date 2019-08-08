@@ -78,6 +78,14 @@
             android:layout_marginTop="10dp"
             android:text="ForceReleaseSimCardReq" />
 
+
+        <Button
+            android:id="@+id/btn_des"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="DES Test" />
+
     </LinearLayout>
 </ScrollView>
 

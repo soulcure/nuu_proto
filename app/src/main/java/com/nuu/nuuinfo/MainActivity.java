@@ -11,6 +11,7 @@ import com.nuu.MiFiManager;
 import com.nuu.proto.Common;
 import com.nuu.proto.Nuu;
 import com.nuu.socket.ReceiveListener;
+import com.nuu.utils.DESCrypt;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +60,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.btn_sim_auth_req).setOnClickListener(this);
         findViewById(R.id.btn_report_req).setOnClickListener(this);
         findViewById(R.id.btn_force_release_sim_card_req).setOnClickListener(this);
+        findViewById(R.id.btn_des).setOnClickListener(this);
     }
 
 
@@ -92,6 +94,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.btn_force_release_sim_card_req:
                 reqForceReleaseSimCard();
+                break;
+            case R.id.btn_des:
+                desTest();
                 break;
         }
     }
@@ -275,4 +280,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         MiFiManager.instance().forceReleaseSimCardReq(imei, imsi, msgid, callback);
     }
+
+
+    private void desTest() {
+        String content = "我们是mifi项目组";
+
+        Log.d(TAG, "DESCrypt decrypt before:" + content);
+
+        byte[] data = content.getBytes();
+
+        byte[] byteContent = DESCrypt.instance().encrypt(data);
+
+        byte[] des = DESCrypt.instance().decrypt(byteContent);
+
+        String desStr = new String(des);
+
+        Log.d(TAG, "DESCrypt decrypt after:" + desStr);
+
+
+    }
+
 }
