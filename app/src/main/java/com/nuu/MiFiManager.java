@@ -13,12 +13,15 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.protobuf.ByteString;
 import com.google.protobuf.GeneratedMessageV3;
 import com.nuu.config.FileConfig;
 import com.nuu.entity.ReportData;
 import com.nuu.http.DownloadListener;
 import com.nuu.http.OkHttpConnector;
 import com.nuu.nuuinfo.BuildConfig;
+import com.nuu.proto.Common;
+import com.nuu.proto.Nuu;
 import com.nuu.proto.DeviceStatus;
 import com.nuu.proto.ServerResponse;
 import com.nuu.proto.UpdateRequest;
@@ -278,8 +281,8 @@ public class MiFiManager {
     /**
      * 发送socket协议
      *
-     * @param commandId  命令码
-     * @param callback 数据
+     * @param commandId 命令码
+     * @param callback  数据
      */
     public void sendProto(GeneratedMessageV3 msg, short commandId,
                           ReceiveListener callback) {
@@ -670,7 +673,6 @@ public class MiFiManager {
     }
 
 
-
     /////////////////////////////////////////////
 
     public interface OnDeviceInfo {
@@ -895,4 +897,147 @@ public class MiFiManager {
         };
         checkUpdate(devId, curVerCode, brand, model, callback);
     }
+
+
+    public void getSimCardReq(String imei, int plmn, int lac, int ci, int flag, int speed,
+                              int allocData, String exceptImsi, String releaseReason,
+                              List<Integer> mccs, ReceiveListener callback) {
+
+        short commandId = 0x01;
+
+        Nuu.GetSimCardReq.Builder builder = Nuu.GetSimCardReq.newBuilder();
+        builder.setImei(imei);  //required
+        builder.setPlmn(plmn);  //required
+        builder.setLac(lac);//optional
+        builder.setCi(ci);//optional
+        builder.setSpecifiedFlag(flag);//optional
+        builder.setSpeed(speed);//optional
+        builder.setAllocData(allocData);//optional
+        builder.setExceptImsi(exceptImsi);//optional
+        builder.setReleaseReason(releaseReason);//optional
+        builder.addAllMccs(mccs);//repeated
+
+        Nuu.GetSimCardReq msg = builder.build();
+
+        sendProto(msg, commandId, callback);
+    }
+
+
+    public void getSimDataReq(long uniqueKey, String imei, String imsi,
+                              int report_time, long up_stream, long down_stream,
+                              int alloc_data, int speed, int plmn, int lac, int ci,
+                              ReceiveListener callback) {
+        short commandId = 0x03;
+
+        Nuu.GetSimDataReq.Builder builder = Nuu.GetSimDataReq.newBuilder();
+
+        builder.setUniqueKey(uniqueKey);//required
+        builder.setImei(imei);  //required
+        builder.setImsi(imsi);  //required
+        builder.setReportTime(report_time);  //required
+        builder.setUpStream(up_stream);  //required
+        builder.setDownStream(down_stream);  //required
+        builder.setAllocData(alloc_data);  //required
+
+        builder.setSpeed(speed);//optional
+        builder.setPlmn(plmn);  //optional
+        builder.setLac(lac);//optional
+        builder.setCi(ci);//optional
+
+        Nuu.GetSimDataReq msg = builder.build();
+
+        sendProto(msg, commandId, callback);
+    }
+
+
+    public void releaseSimCardReq(long uniqueKey, String imei, String imsi,
+                                  int report_time, long up_stream, long down_stream,
+                                  int alloc_data, int speed, int plmn, int lac, int ci,
+                                  ReceiveListener callback) {
+        short commandId = 0x05;
+
+        Nuu.ReleaseSimCardReq.Builder builder = Nuu.ReleaseSimCardReq.newBuilder();
+
+        builder.setUniqueKey(uniqueKey);//required
+        builder.setImei(imei);  //required
+        builder.setImsi(imsi);  //required
+
+        builder.setPlmn(plmn);  //optional
+        builder.setLac(lac);//optional
+        builder.setCi(ci);//optional
+
+        Nuu.ReleaseSimCardReq msg = builder.build();
+
+        sendProto(msg, commandId, callback);
+    }
+
+
+    public void simAuthReq(long uniqueKey, String imei, String imsi, ByteString auth_data,
+                           int report_time, long up_stream, long down_stream,
+                           int alloc_data, int speed, int plmn, int lac, int ci,
+                           ReceiveListener callback) {
+        short commandId = 0x07;
+
+        Nuu.SimAuthReq.Builder builder = Nuu.SimAuthReq.newBuilder();
+
+        builder.setUniqueKey(uniqueKey);//required
+        builder.setImei(imei);  //required
+        builder.setImsi(imsi);  //required
+        builder.setAuthData(auth_data);  //required
+
+        builder.setPlmn(plmn);  //optional
+        builder.setLac(lac);//optional
+        builder.setCi(ci);//optional
+
+        Nuu.SimAuthReq msg = builder.build();
+
+        sendProto(msg, commandId, callback);
+    }
+
+
+    public void reportReq(long uniqueKey, String imei, String imsi, int report_time, long up_stream,
+                          long down_stream, int type, int reg_time,
+                          int plmn, int lac, int ci,
+                          Common.NetworkType network_type, int rssi,
+                          ReceiveListener callback) {
+        short commandId = 0x09;
+
+        Nuu.ReportReq.Builder builder = Nuu.ReportReq.newBuilder();
+
+        builder.setUniqueKey(uniqueKey);//required
+        builder.setImei(imei);  //required
+        builder.setImsi(imsi);  //required
+        builder.setReportTime(report_time);  //required
+        builder.setUpStream(up_stream);  //required
+        builder.setDownStream(down_stream);  //required
+        builder.setType(type);  //required
+
+        builder.setRegTime(reg_time);  //optional
+        builder.setPlmn(plmn);  //optional
+        builder.setLac(lac);//optional
+        builder.setCi(ci);//optional
+        builder.setNetworkType(network_type);//optional
+        builder.setRssi(rssi);//optional
+
+        Nuu.ReportReq msg = builder.build();
+
+        sendProto(msg, commandId, callback);
+    }
+
+
+    public void forceReleaseSimCardReq(String imei, String imsi, long msgid,
+                                       ReceiveListener callback) {
+        short commandId = 0x0a;
+
+        Nuu.ForceReleaseSimCardReq.Builder builder = Nuu.ForceReleaseSimCardReq.newBuilder();
+
+        builder.setImei(imei);  //required
+        builder.setImsi(imsi);  //required
+        builder.setMsgid(msgid);  //required
+
+        Nuu.ForceReleaseSimCardReq msg = builder.build();
+
+        sendProto(msg, commandId, callback);
+    }
+
 }

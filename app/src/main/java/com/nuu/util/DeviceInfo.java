@@ -28,14 +28,11 @@ import android.telephony.TelephonyManager;
 import com.nuu.entity.BatteryInfo;
 import com.nuu.entity.ReportData;
 import com.nuu.entity.WifiClient;
-import com.nuu.nuuinfo.BuildConfig;
-import com.nuu.proto.DeviceStatus;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;

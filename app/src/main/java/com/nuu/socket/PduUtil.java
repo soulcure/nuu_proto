@@ -101,4 +101,30 @@ public abstract class PduUtil {
     }
 
 
+    public static String bytes2HexString(byte[] b) {
+        StringBuilder sb = new StringBuilder();
+        int length = b.length;
+        for (int i = 0; i < length; i++) {
+            String hex = Integer.toHexString(b[i] & 0xFF);
+            if (hex.length() == 1) {
+                hex = '0' + hex;
+            }
+            sb.append("0x").append(hex.toUpperCase());
+            if (i < length - 1) {
+                sb.append(',');
+            }
+        }
+        return sb.toString();
+    }
+
+
+    public static String byte2HexString(byte b) {
+        String hex = Integer.toHexString(b & 0xFF);
+        if (hex.length() == 1) {
+            hex = '0' + hex;
+        }
+        return "0x" + hex.toUpperCase();
+    }
+
+
 }
