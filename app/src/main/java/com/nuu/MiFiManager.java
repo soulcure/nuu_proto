@@ -951,8 +951,8 @@ public class MiFiManager {
 
 
     public void releaseSimCardReq(long uniqueKey, String imei, String imsi,
-                                  int report_time, long up_stream, long down_stream,
-                                  int alloc_data, int speed, int plmn, int lac, int ci,
+                                  int plmn, int lac, int ci,
+                                  Common.SimcardReleaseReason release_reason,
                                   ReceiveListener callback) {
         short commandId = 0x05;
 
@@ -965,6 +965,7 @@ public class MiFiManager {
         builder.setPlmn(plmn);  //optional
         builder.setLac(lac);//optional
         builder.setCi(ci);//optional
+        builder.setReleaseReason(release_reason);//optional
 
         Nuu.ReleaseSimCardReq msg = builder.build();
 
@@ -973,9 +974,7 @@ public class MiFiManager {
 
 
     public void simAuthReq(long uniqueKey, String imei, String imsi, ByteString auth_data,
-                           int report_time, long up_stream, long down_stream,
-                           int alloc_data, int speed, int plmn, int lac, int ci,
-                           ReceiveListener callback) {
+                           int plmn, int lac, int ci, ReceiveListener callback) {
         short commandId = 0x07;
 
         Nuu.SimAuthReq.Builder builder = Nuu.SimAuthReq.newBuilder();
