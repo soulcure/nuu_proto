@@ -6,13 +6,14 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * Encrypt and decrypt messages using DES 192 bit
+ * Encrypt and decrypt messages using DES
  */
 public final class DESCrypt {
 
     private static final String TAG = "TcpClient";
 
-    public static final String DES_MODE = "DES/ECB/PKCS5Padding";   //"DES/ECB/NoPadding" ,"DES/ECB/PKCS5Padding"
+    private static final String Algorithm = "DESede";
+    private static final String DES_MODE = "DESede/ECB/PKCS5Padding";   //"DES/ECB/NoPadding" ,"DES/ECB/PKCS5Padding"
 
     private byte[] keyCode;
 
@@ -26,13 +27,15 @@ public final class DESCrypt {
     }
 
     private DESCrypt() {
-        keyCode = "hello world".getBytes();
+        keyCode = "1234567800000000".getBytes();
+        //keyCode = "12345678".getBytes();
     }
 
     public byte[] encrypt(byte[] byteContent) {
         try {
-            SecretKeySpec keySpec = new SecretKeySpec(keyCode, "DES");
+            SecretKeySpec keySpec = new SecretKeySpec(keyCode, Algorithm);
             Cipher desCipher = Cipher.getInstance(DES_MODE);
+
             desCipher.init(Cipher.ENCRYPT_MODE, keySpec);
             return desCipher.doFinal(byteContent);
         } catch (Exception e) {
@@ -43,7 +46,7 @@ public final class DESCrypt {
 
     public byte[] decrypt(byte[] encrypt) {
         try {
-            SecretKeySpec keySpec = new SecretKeySpec(keyCode, "DES");
+            SecretKeySpec keySpec = new SecretKeySpec(keyCode, Algorithm);
             Cipher cipher = Cipher.getInstance(DES_MODE);// 创建密码器
             cipher.init(Cipher.DECRYPT_MODE, keySpec);
             return cipher.doFinal(encrypt);

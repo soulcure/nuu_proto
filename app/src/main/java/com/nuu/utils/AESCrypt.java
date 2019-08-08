@@ -22,8 +22,8 @@ public final class AESCrypt {
 
     private static final String AES_KEY_STR = "Y39rL18flE6H9fLbbuM9cJYi";  //AES key
 
-    private static final String AES_MODE = "AES/CBC/PKCS5Padding";
-    //private static final String AES_MODE = "AES";  //the default cipher for AES is AES/ECB/PKCS5Padding
+    private static final String Algorithm = "AES";
+    private static final String AES_MODE = "AES/CBC/PKCS5Padding"; //the default cipher for AES is AES/ECB/PKCS5Padding
 
     private static AESCrypt instance;
 
@@ -31,7 +31,7 @@ public final class AESCrypt {
 
     private AESCrypt() {
         try {
-            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+            KeyGenerator keyGen = KeyGenerator.getInstance(Algorithm);
             //此处解决mac，linux报错
             SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
             random.setSeed(AES_KEY_STR.getBytes());
@@ -75,7 +75,7 @@ public final class AESCrypt {
     public byte[] encrypt(byte[] byteContent) {
         try {
             byte[] iv = getIV();
-            SecretKeySpec keySpec = new SecretKeySpec(keyCode, "AES");
+            SecretKeySpec keySpec = new SecretKeySpec(keyCode, Algorithm);
             Cipher cipher = Cipher.getInstance(AES_MODE);// 创建密码器
 
             //指定一个初始化向量 (Initialization vector，IV)， IV 必须是16位
@@ -92,7 +92,7 @@ public final class AESCrypt {
     public byte[] decrypt(byte[] encrypt) {
         try {
             byte[] iv = getIV();
-            SecretKeySpec keySpec = new SecretKeySpec(keyCode, "AES");
+            SecretKeySpec keySpec = new SecretKeySpec(keyCode, Algorithm);
             Cipher cipher = Cipher.getInstance(AES_MODE);// 创建密码器
 
             //指定一个初始化向量 (Initialization vector，IV)， IV 必须是16位

@@ -10,6 +10,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.nuu.MiFiManager;
 import com.nuu.proto.Common;
 import com.nuu.proto.Nuu;
+import com.nuu.socket.PduUtil;
 import com.nuu.socket.ReceiveListener;
 import com.nuu.utils.DESCrypt;
 
@@ -283,13 +284,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
     private void desTest() {
-        String content = "我们是mifi项目组";
+        String content = "12345678";
 
         Log.d(TAG, "DESCrypt decrypt before:" + content);
 
         byte[] data = content.getBytes();
 
         byte[] byteContent = DESCrypt.instance().encrypt(data);
+
+        String CryptTest = PduUtil.bytes2HexString(byteContent);
+
+        Log.d(TAG, "DESCrypt:" + CryptTest);
+
 
         byte[] des = DESCrypt.instance().decrypt(byteContent);
 
