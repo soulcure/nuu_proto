@@ -6,7 +6,9 @@ import android.os.Message;
 import android.util.Log;
 
 import com.google.protobuf.GeneratedMessageV3;
+import com.nuu.nuuinfo.BuildConfig;
 import com.nuu.util.AppUtils;
+import com.nuu.util.HexUtil;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -159,9 +161,9 @@ public class TcpClient extends PduUtil implements Runnable {
         PduBase pduBase = new PduBase();
         int seqNum = getSeqNum();
 
-        pduBase.seqId = seqNum;
-        pduBase.commandId = commandId;
         pduBase.length = (short) msg.getSerializedSize();
+        pduBase.commandId = commandId;
+        pduBase.seqId = seqNum;
         pduBase.body = msg.toByteArray();
 
         Log.d(TAG, "length:" + pduBase.length);
@@ -491,6 +493,13 @@ public class TcpClient extends PduUtil implements Runnable {
                             continue;
                         }
                         buffer.flip();
+
+                        if (BuildConfig.DEBUG) {
+                            byte[] data = new byte[buffer.remaining()];
+                            buffer.get(data);
+                            Log.d(TAG, "tcp send buffer:" + HexUtil.bytes2HexString(data));
+                            buffer.flip();
+                        }
 
                         if (buffer.remaining() > 0) {
                             int count;

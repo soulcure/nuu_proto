@@ -70,12 +70,12 @@ public abstract class PduUtil {
             buffer.flip();
         }
 
-        short commandId = buffer.getShort();
         short length = buffer.getShort();
-        int seqId = buffer.getInt();
+        short commandId = buffer.getShort();
 
-        units.commandId = commandId;
+        int seqId = buffer.getInt();
         units.length = length;
+        units.commandId = commandId;
         units.seqId = seqId;
 
         Log.d(TAG, "tcp rec package params Length:" + length);
@@ -99,18 +99,23 @@ public abstract class PduUtil {
         ByteBuffer byteBuffer;
         if (AppConfig.isEncryption) {
             if (req.body != null) {
+                Log.d(TAG, "DESCrypt before length:" + req.body.length);
                 byte[] data = DESCrypt.instance().encrypt(req.body);
+
+                short length = (short) data.length;
+                Log.d(TAG, "DESCrypt after length:" + length);
+
                 byteBuffer = ByteBuffer.allocate(PduBase.PDU_HEADER_LENGTH + data.length);
                 byteBuffer.order(ByteOrder.BIG_ENDIAN);
+                byteBuffer.putShort(length);
                 byteBuffer.putShort(req.commandId);
-                byteBuffer.putShort((short) data.length);
                 byteBuffer.putInt(req.seqId);
                 byteBuffer.put(data);
             } else {
                 byteBuffer = ByteBuffer.allocate(PduBase.PDU_HEADER_LENGTH);
                 byteBuffer.order(ByteOrder.BIG_ENDIAN);
-                byteBuffer.putShort(req.commandId);
                 byteBuffer.putShort((short) 0);
+                byteBuffer.putShort(req.commandId);
                 byteBuffer.putInt(req.seqId);
             }
 
@@ -118,8 +123,8 @@ public abstract class PduUtil {
             byteBuffer = ByteBuffer.allocate(PduBase.PDU_HEADER_LENGTH + req.length);
             byteBuffer.order(ByteOrder.BIG_ENDIAN);
 
-            byteBuffer.putShort(req.commandId);
             byteBuffer.putShort(req.length);
+            byteBuffer.putShort(req.commandId);
             byteBuffer.putInt(req.seqId);
             if (req.body != null) {
                 byteBuffer.put(req.body);

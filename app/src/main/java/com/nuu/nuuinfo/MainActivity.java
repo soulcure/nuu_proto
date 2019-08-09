@@ -111,7 +111,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     //commandId 0x01
     private void reqSimCard() {
-        String imei = "352693080702174";
+        String imei = "8a9adcd4";
         int plmn = 46001;
         int lac = 166;
         int ci = 111888899;
