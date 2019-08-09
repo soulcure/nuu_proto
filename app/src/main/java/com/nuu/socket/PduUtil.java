@@ -86,6 +86,8 @@ public abstract class PduUtil {
                 byte[] data = new byte[packageLen];
                 buffer.get(data);
                 units.body = DESCrypt.instance().decrypt(data);
+                Log.d(TAG, "tcp rec buffer decrypt:" + HexUtil.bytes2HexString(units.body));
+
             } else {
                 units.body = new byte[packageLen];
                 buffer.get(units.body);
