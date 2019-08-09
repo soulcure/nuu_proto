@@ -19,7 +19,7 @@ public class AppConfig {
 
     private final static String SOCKET_HOST[] = new String[]{"http://119.23.74.49", "47.91.250.107"};
 
-    private final static int SOCKET_PORT[] = new int[]{18990, 18990};
+    private final static int SOCKET_PORT[] = new int[]{5890, 18990};
 
     public static String getSocketHost() {
         return SOCKET_HOST[LAUNCH_MODE];
