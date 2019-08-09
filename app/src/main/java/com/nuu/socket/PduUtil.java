@@ -24,7 +24,7 @@ public abstract class PduUtil {
         buffer.order(ByteOrder.BIG_ENDIAN);
         if (buffer.limit() >= PduBase.PDU_HEADER_LENGTH) {
             //has full header
-            int totalLength = PduBase.PDU_HEADER_LENGTH + buffer.getShort(PduBase.PDU_BODY_LENGTH_INDEX);
+            int totalLength = buffer.getShort(PduBase.PDU_BODY_LENGTH_INDEX);
             if (totalLength <= buffer.limit()) {
                 //has a full pack.
                 byte[] packByte = new byte[totalLength];
@@ -63,7 +63,6 @@ public abstract class PduUtil {
         buffer.flip();
 
         if (BuildConfig.DEBUG) {
-            Log.d(TAG, "tcp rec package msgType:" + buffer.get(1));
             byte[] data = new byte[buffer.remaining()];
             buffer.get(data);
             Log.d(TAG, "tcp rec buffer:" + HexUtil.bytes2HexString(data));
@@ -72,21 +71,23 @@ public abstract class PduUtil {
 
         short length = buffer.getShort();
         short commandId = buffer.getShort();
-
         int seqId = buffer.getInt();
+
         units.length = length;
         units.commandId = commandId;
         units.seqId = seqId;
 
         Log.d(TAG, "tcp rec package params Length:" + length);
 
-        if (length > 0) {
+        int packageLen = length - PduBase.PDU_HEADER_LENGTH;
+
+        if (packageLen > 0) {
             if (AppConfig.isEncryption) {
-                byte[] data = new byte[length];
+                byte[] data = new byte[packageLen];
                 buffer.get(data);
                 units.body = DESCrypt.instance().decrypt(data);
             } else {
-                units.body = new byte[length];
+                units.body = new byte[packageLen];
                 buffer.get(units.body);
             }
         }
@@ -105,25 +106,31 @@ public abstract class PduUtil {
                 short length = (short) data.length;
                 Log.d(TAG, "DESCrypt after length:" + length);
 
-                byteBuffer = ByteBuffer.allocate(PduBase.PDU_HEADER_LENGTH + data.length);
+                short packageLen = (short) (PduBase.PDU_HEADER_LENGTH + length);
+
+                byteBuffer = ByteBuffer.allocate(packageLen);
                 byteBuffer.order(ByteOrder.BIG_ENDIAN);
-                byteBuffer.putShort(length);
+
+                byteBuffer.putShort(packageLen);
                 byteBuffer.putShort(req.commandId);
                 byteBuffer.putInt(req.seqId);
                 byteBuffer.put(data);
             } else {
                 byteBuffer = ByteBuffer.allocate(PduBase.PDU_HEADER_LENGTH);
                 byteBuffer.order(ByteOrder.BIG_ENDIAN);
-                byteBuffer.putShort((short) 0);
+
+                byteBuffer.putShort((short) PduBase.PDU_HEADER_LENGTH);
                 byteBuffer.putShort(req.commandId);
                 byteBuffer.putInt(req.seqId);
             }
 
         } else {
-            byteBuffer = ByteBuffer.allocate(PduBase.PDU_HEADER_LENGTH + req.length);
+            short packageLen = (short) (PduBase.PDU_HEADER_LENGTH + req.length);
+
+            byteBuffer = ByteBuffer.allocate(packageLen);
             byteBuffer.order(ByteOrder.BIG_ENDIAN);
 
-            byteBuffer.putShort(req.length);
+            byteBuffer.putShort(packageLen);
             byteBuffer.putShort(req.commandId);
             byteBuffer.putInt(req.seqId);
             if (req.body != null) {

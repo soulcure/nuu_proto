@@ -283,11 +283,6 @@ public class TcpClient extends PduUtil implements Runnable {
     @Override
     public void OnRec(final PduBase pduBase) {
         final int key = pduBase.seqId;
-        final byte ver = (byte) ((pduBase.commandId >> 12) & 0x000F);
-        final byte cate = (byte) ((pduBase.commandId >> 8) & 0x000F);
-
-        String log = "tcp rec ver:" + ver + "& tcp rec cate:" + cate + "& tcp rec commandId:" + key;
-        Log.d(TAG, log);
 
         mHandler.post(new Runnable() {
             @Override
