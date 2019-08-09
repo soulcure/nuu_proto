@@ -4,7 +4,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion COMPILE_SDK_VERSION as int
     defaultConfig {
-        applicationId "com.nuu.nuuinfo"
+        applicationId "com.nuu.proto"
         minSdkVersion MIN_SDK_VERSION as int
         targetSdkVersion TARGET_SDK_VERSION as int
         versionCode 6
@@ -59,9 +59,12 @@ android {
     }
 }
 dependencies {
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.google.protobuf:protobuf-java:3.7.1'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
+    implementation 'com.blakequ.rsa:rsa:1.1'
 
 }
 

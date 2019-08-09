@@ -2,9 +2,12 @@ package com.nuu.nuuinfo;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 
+import com.blakequ.rsa.FileUtils;
+import com.blakequ.rsa.RSAProvider;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.nuu.MiFiManager;
@@ -14,6 +17,7 @@ import com.nuu.socket.PduUtil;
 import com.nuu.socket.ReceiveListener;
 import com.nuu.utils.DESCrypt;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,6 +102,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.btn_des:
                 desTest();
+                //testRsa();
+                // testRsa1();
                 break;
         }
     }
@@ -304,6 +310,78 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Log.d(TAG, "DESCrypt decrypt after:" + desStr);
 
 
+    }
+
+
+    private void testRsa() {
+        Log.d(TAG, "测试RAS 私钥加密 公钥解密:");
+
+        String content = "ABCDEFG";
+        byte[] data = content.getBytes();
+
+        Log.d(TAG, "加密前字符串内容:" + content);
+        Log.d(TAG, "加密前字节数组内容:" + PduUtil.bytes2HexString(data));
+
+        try {
+
+            String publicKeyPath = Environment.getExternalStorageDirectory().getPath() + "/public.pem";
+            String publicKey = FileUtils.readString(new FileInputStream(publicKeyPath));
+
+            String privateKeyPath = Environment.getExternalStorageDirectory().getPath() + "/private.pem";
+            String privateKey = FileUtils.readString(new FileInputStream(privateKeyPath));
+
+            byte[] test = RSAProvider.encryptPrivateKey(data, privateKey);
+
+            String CryptTest = PduUtil.bytes2HexString(test);
+
+            Log.d(TAG, "私钥加密后字节数组内容:" + CryptTest);
+
+            byte[] test1 = RSAProvider.decryptPublicKey(test, publicKey);
+            String decryptTest = PduUtil.bytes2HexString(test1);
+
+            Log.d(TAG, "公钥解密后字节数组内容:" + decryptTest);
+            Log.d(TAG, "公钥解密后字符串内容:" + new String(test1));
+
+        } catch (Exception e) {
+            Log.e(TAG, "error" + e.getMessage());
+        }
+    }
+
+
+
+
+    private void testRsa1() {
+        Log.d(TAG, "测试RAS 公钥加密 私钥解密:");
+
+        String content = "ABCDEFG";
+        byte[] data = content.getBytes();
+
+        Log.d(TAG, "加密前字符串内容:" + content);
+        Log.d(TAG, "加密前字节数组内容:" + PduUtil.bytes2HexString(data));
+
+        try {
+
+            String publicKeyPath = Environment.getExternalStorageDirectory().getPath() + "/public.pem";
+            String publicKey = FileUtils.readString(new FileInputStream(publicKeyPath));
+
+            String privateKeyPath = Environment.getExternalStorageDirectory().getPath() + "/private.pem";
+            String privateKey = FileUtils.readString(new FileInputStream(privateKeyPath));
+
+            byte[] test = RSAProvider.encryptPublicKey(data, publicKey);
+
+            String CryptTest = PduUtil.bytes2HexString(test);
+
+            Log.d(TAG, "共钥加密后字节数组内容:" + CryptTest);
+
+            byte[] test1 = RSAProvider.decryptPrivateKey(test, privateKey);
+            String decryptTest = PduUtil.bytes2HexString(test1);
+
+            Log.d(TAG, "公钥解密后字节数组内容:" + decryptTest);
+            Log.d(TAG, "公钥解密后字符串内容:" + new String(test1));
+
+        } catch (Exception e) {
+            Log.e(TAG, "error" + e.getMessage());
+        }
     }
 
 }
