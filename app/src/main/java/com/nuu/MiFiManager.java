@@ -903,7 +903,7 @@ public class MiFiManager {
                               int allocData, String exceptImsi, String releaseReason,
                               List<Integer> mccs, ReceiveListener callback) {
 
-        short commandId = 0x01;
+        short commandId = 0x201;
 
         Nuu.GetSimCardReq.Builder builder = Nuu.GetSimCardReq.newBuilder();
         builder.setImei(imei);  //required
@@ -927,7 +927,7 @@ public class MiFiManager {
                               int report_time, long up_stream, long down_stream,
                               int alloc_data, int speed, int plmn, int lac, int ci,
                               ReceiveListener callback) {
-        short commandId = 0x03;
+        short commandId = 0x203;
 
         Nuu.GetSimDataReq.Builder builder = Nuu.GetSimDataReq.newBuilder();
 
@@ -954,7 +954,7 @@ public class MiFiManager {
                                   int plmn, int lac, int ci,
                                   Common.SimcardReleaseReason release_reason,
                                   ReceiveListener callback) {
-        short commandId = 0x05;
+        short commandId = 0x205;
 
         Nuu.ReleaseSimCardReq.Builder builder = Nuu.ReleaseSimCardReq.newBuilder();
 
@@ -975,7 +975,7 @@ public class MiFiManager {
 
     public void simAuthReq(long uniqueKey, String imei, String imsi, ByteString auth_data,
                            int plmn, int lac, int ci, ReceiveListener callback) {
-        short commandId = 0x07;
+        short commandId = 0x207;
 
         Nuu.SimAuthReq.Builder builder = Nuu.SimAuthReq.newBuilder();
 
@@ -999,7 +999,7 @@ public class MiFiManager {
                           int plmn, int lac, int ci,
                           Common.NetworkType network_type, int rssi,
                           ReceiveListener callback) {
-        short commandId = 0x09;
+        short commandId = 0x209;
 
         Nuu.ReportReq.Builder builder = Nuu.ReportReq.newBuilder();
 
@@ -1026,7 +1026,7 @@ public class MiFiManager {
 
     public void forceReleaseSimCardReq(String imei, String imsi, long msgid,
                                        ReceiveListener callback) {
-        short commandId = 0x0a;
+        short commandId = 0x20a;
 
         Nuu.ForceReleaseSimCardReq.Builder builder = Nuu.ForceReleaseSimCardReq.newBuilder();
 
