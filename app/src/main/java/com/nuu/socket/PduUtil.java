@@ -77,7 +77,7 @@ public abstract class PduUtil {
         units.commandId = commandId;
         units.seqId = seqId;
 
-        Log.d(TAG, "tcp rec package params Length:" + length);
+        Log.d(TAG, "tcp rec package Length:" + length);
 
         int packageLen = length - PduBase.PDU_HEADER_LENGTH;
 
@@ -86,10 +86,11 @@ public abstract class PduUtil {
                 byte[] data = new byte[packageLen];
                 buffer.get(data);
 
+                Log.d(TAG, "tcp rec buffer decrypt before length:" + packageLen);
                 Log.d(TAG, "tcp rec buffer decrypt before:" + HexUtil.bytes2HexString(data));
                 units.body = DESCrypt.instance().decrypt(data);
 
-                Log.d(TAG, "tcp rec buffer decrypt length:" + units.body.length);
+                Log.d(TAG, "tcp rec buffer decrypt before length:" + units.body.length);
                 Log.d(TAG, "tcp rec buffer decrypt after:" + HexUtil.bytes2HexString(units.body));
 
 
