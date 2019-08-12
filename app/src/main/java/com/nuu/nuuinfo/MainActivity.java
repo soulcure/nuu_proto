@@ -129,7 +129,28 @@ public class MainActivity extends Activity implements View.OnClickListener {
             public void OnRec(byte[] body) {
                 try {
                     Nuu.GetSimCardRsp resp = Nuu.GetSimCardRsp.parseFrom(body);
-                    Log.d(TAG, "GetSimCardRsp:" + resp.toString());
+                    Nuu.BaseResponse result = resp.getBaseRsp();
+                    long test1 = resp.getUniqueKey();
+                    String test2 = resp.getImsi();
+                    int test3 = resp.getCardType();
+                    String test4 = resp.getKi();
+                    String test5 = resp.getOpc();
+                    int test6 = resp.getAllocData();
+                    int test7 = resp.getRenewAllocData();
+                    int test8 = resp.getSpeed();
+                    List<String> test9 = resp.getOplmnList();
+                    String test10 = resp.getRplmn();
+                    List<String> test11 = resp.getFplmnList();
+                    Common.RadioTechType test12 = resp.getRadioType();
+                    List<Common.Apn> test13 = resp.getApnList();
+                    int test14 = resp.getMncLen();
+                    List<Integer> test15 = resp.getMccsList();
+                    int test16 = resp.getEndTime();
+                    int test17 = resp.getServerTime();
+                    int test18 = resp.getReportInterval();
+                    int test19 = resp.getReportDataThreshold();
+
+                    Log.d(TAG, "GetSimCardRsp:");
                 } catch (InvalidProtocolBufferException e) {
                     Log.e(TAG, e.getMessage());
                 }
@@ -160,7 +181,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
             public void OnRec(byte[] body) {
                 try {
                     Nuu.GetSimDataRsp resp = Nuu.GetSimDataRsp.parseFrom(body);
-                    Log.d(TAG, "GetSimDataRsp:" + resp.toString());
+
+                    Nuu.BaseResponse result = resp.getBaseRsp();
+                    int test6 = resp.getAllocData();
+                    int test7 = resp.getRenewAllocData();
+                    int test8 = resp.getSpeed();
+                    int test18 = resp.getReportInterval();
+                    int test19 = resp.getReportDataThreshold();
+                    int test16 = resp.getEndTime();
+
+                    Log.d(TAG, "GetSimDataRsp");
                 } catch (InvalidProtocolBufferException e) {
                     Log.e(TAG, e.getMessage());
                 }
@@ -188,8 +218,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
             @Override
             public void OnRec(byte[] body) {
                 try {
-                    Nuu.GetSimDataRsp resp = Nuu.GetSimDataRsp.parseFrom(body);
-                    Log.d(TAG, "GetSimDataRsp:" + resp.toString());
+                    Nuu.ReleaseSimCardRsp resp = Nuu.ReleaseSimCardRsp.parseFrom(body);
+
+                    Nuu.BaseResponse result = resp.getBaseRsp();
+
+                    Log.d(TAG, "ReleaseSimCard");
                 } catch (InvalidProtocolBufferException e) {
                     Log.e(TAG, e.getMessage());
                 }
@@ -219,7 +252,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
             public void OnRec(byte[] body) {
                 try {
                     Nuu.SimAuthRsp resp = Nuu.SimAuthRsp.parseFrom(body);
-                    Log.d(TAG, "SimAuthRsp:" + resp.toString());
+
+                    Nuu.BaseResponse result = resp.getBaseRsp();
+                    ByteString test1 = resp.getAuthData();
+
+                    Log.d(TAG, "SimAuthRsp");
                 } catch (InvalidProtocolBufferException e) {
                     Log.e(TAG, e.getMessage());
                 }
@@ -254,7 +291,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
             public void OnRec(byte[] body) {
                 try {
                     Nuu.ReportRsp resp = Nuu.ReportRsp.parseFrom(body);
-                    Log.d(TAG, "ReportRsp:" + resp.toString());
+                    Nuu.BaseResponse result = resp.getBaseRsp();
+                    Log.d(TAG, "ReportRsp");
                 } catch (InvalidProtocolBufferException e) {
                     Log.e(TAG, e.getMessage());
                 }
@@ -278,7 +316,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
             public void OnRec(byte[] body) {
                 try {
                     Nuu.ForceReleaseSimCardRsp resp = Nuu.ForceReleaseSimCardRsp.parseFrom(body);
-                    Log.d(TAG, "ForceReleaseSimCardRsp:" + resp.toString());
+                    Nuu.BaseResponse result = resp.getBaseRsp();
+                    String test1 = resp.getImei();
+                    long test2 = resp.getMsgid();
+
+                    Log.d(TAG, "ForceReleaseSimCardRsp");
                 } catch (InvalidProtocolBufferException e) {
                     Log.e(TAG, e.getMessage());
                 }
@@ -346,8 +388,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
             Log.e(TAG, "error" + e.getMessage());
         }
     }
-
-
 
 
     private void testRsa1() {
