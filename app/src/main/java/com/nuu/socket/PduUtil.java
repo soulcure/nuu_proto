@@ -87,6 +87,7 @@ public abstract class PduUtil {
                 buffer.get(data);
                 units.body = DESCrypt.instance().decrypt(data);
                 Log.d(TAG, "tcp rec buffer decrypt:" + HexUtil.bytes2HexString(units.body));
+                Log.d(TAG, "tcp rec buffer decrypt length:" + units.body.length);
 
             } else {
                 units.body = new byte[packageLen];
