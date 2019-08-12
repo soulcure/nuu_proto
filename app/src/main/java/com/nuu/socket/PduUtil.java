@@ -22,6 +22,8 @@ public abstract class PduUtil {
 
     public int ParsePdu(ByteBuffer buffer) {
         buffer.order(ByteOrder.BIG_ENDIAN);
+        Log.v(TAG, "ByteBuffer limit:" + buffer.limit());
+
         if (buffer.limit() >= PduBase.PDU_HEADER_LENGTH) {
             //has full header
             int totalLength = buffer.getShort(PduBase.PDU_BODY_LENGTH_INDEX);
