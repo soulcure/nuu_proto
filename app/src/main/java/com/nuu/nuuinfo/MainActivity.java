@@ -150,7 +150,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     int test18 = resp.getReportInterval();
                     int test19 = resp.getReportDataThreshold();
 
-                    Log.d(TAG, "GetSimCardRsp:");
+                    Log.d(TAG, "GetSimCardRsp");
+                    Log.d(TAG, "GetSimCardRsp:" + result.getRet() + "#" + result.getErrMsg() + "#" + test1 + "#" + test2 + "#"
+                            + test3 + "#" + test4 + "#" + test5 + "#" + test6 + "#" + test7 + "#" + test8 + "#"
+                            + test9 + "#" + test10 + "#" + test11 + "#" + test12 + "#" + test13 + "#" + test14 + "#"
+                            + test15 + "#" + test16 + "#" + test17 + "#" + test18 + "#" + test19);
+
+
                 } catch (InvalidProtocolBufferException e) {
                     Log.e(TAG, e.getMessage());
                 }
@@ -183,14 +189,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     Nuu.GetSimDataRsp resp = Nuu.GetSimDataRsp.parseFrom(body);
 
                     Nuu.BaseResponse result = resp.getBaseRsp();
-                    int test6 = resp.getAllocData();
-                    int test7 = resp.getRenewAllocData();
-                    int test8 = resp.getSpeed();
-                    int test18 = resp.getReportInterval();
-                    int test19 = resp.getReportDataThreshold();
-                    int test16 = resp.getEndTime();
+                    int test1 = resp.getAllocData();
+                    int test2 = resp.getRenewAllocData();
+                    int test3 = resp.getSpeed();
+                    int test4 = resp.getReportInterval();
+                    int test5 = resp.getReportDataThreshold();
+                    int test6 = resp.getEndTime();
 
                     Log.d(TAG, "GetSimDataRsp");
+                    Log.d(TAG, "GetSimCardRsp:" + result.getRet() + "#" + result.getErrMsg() +
+                            "#" + test1 + "#" + test2 + "#" +
+                            test3 + "#" + test4 + "#" + test5 + "#" + test6);
+
+
                 } catch (InvalidProtocolBufferException e) {
                     Log.e(TAG, e.getMessage());
                 }
@@ -223,6 +234,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     Nuu.BaseResponse result = resp.getBaseRsp();
 
                     Log.d(TAG, "ReleaseSimCard");
+                    Log.d(TAG, "GetSimCardRsp:" + result.getRet() + "#" + result.getErrMsg());
+
                 } catch (InvalidProtocolBufferException e) {
                     Log.e(TAG, e.getMessage());
                 }
@@ -257,6 +270,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     ByteString test1 = resp.getAuthData();
 
                     Log.d(TAG, "SimAuthRsp");
+                    Log.d(TAG, "GetSimCardRsp:" + result.getRet() + "#" + result.getErrMsg() + "#" + test1);
+
                 } catch (InvalidProtocolBufferException e) {
                     Log.e(TAG, e.getMessage());
                 }
@@ -293,6 +308,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     Nuu.ReportRsp resp = Nuu.ReportRsp.parseFrom(body);
                     Nuu.BaseResponse result = resp.getBaseRsp();
                     Log.d(TAG, "ReportRsp");
+                    Log.d(TAG, "GetSimCardRsp:" + result.getRet() + "#" + result.getErrMsg());
+
+
                 } catch (InvalidProtocolBufferException e) {
                     Log.e(TAG, e.getMessage());
                 }
@@ -321,6 +339,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     long test2 = resp.getMsgid();
 
                     Log.d(TAG, "ForceReleaseSimCardRsp");
+                    Log.d(TAG, "GetSimCardRsp:" + result.getRet() + "#" + result.getErrMsg() + "#" + test1 + "#" + test2);
+
+
                 } catch (InvalidProtocolBufferException e) {
                     Log.e(TAG, e.getMessage());
                 }
