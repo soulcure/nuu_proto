@@ -85,9 +85,13 @@ public abstract class PduUtil {
             if (AppConfig.isEncryption) {
                 byte[] data = new byte[packageLen];
                 buffer.get(data);
+
+                Log.d(TAG, "tcp rec buffer decrypt before:" + HexUtil.bytes2HexString(data));
                 units.body = DESCrypt.instance().decrypt(data);
-                Log.d(TAG, "tcp rec buffer decrypt:" + HexUtil.bytes2HexString(units.body));
+
                 Log.d(TAG, "tcp rec buffer decrypt length:" + units.body.length);
+                Log.d(TAG, "tcp rec buffer decrypt after:" + HexUtil.bytes2HexString(units.body));
+
 
             } else {
                 units.body = new byte[packageLen];
@@ -104,10 +108,13 @@ public abstract class PduUtil {
         if (AppConfig.isEncryption) {
             if (req.body != null) {
                 Log.d(TAG, "DESCrypt before length:" + req.body.length);
+                Log.d(TAG, "tcp send buffer decrypt before:" + HexUtil.bytes2HexString(req.body));
+
                 byte[] data = DESCrypt.instance().encrypt(req.body);
 
                 short length = (short) data.length;
                 Log.d(TAG, "DESCrypt after length:" + length);
+                Log.d(TAG, "tcp send buffer decrypt after:" + HexUtil.bytes2HexString(data));
 
                 short packageLen = (short) (PduBase.PDU_HEADER_LENGTH + length);
 
