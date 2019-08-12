@@ -40,14 +40,14 @@ public abstract class PduUtil {
 
                 return totalLength;
             } else {
-                Log.v(TAG, "包头长度符合，包体长度未读完，继续读socket");
+                Log.v(TAG, "socket未读到完整包，包头完整，包体未读完，继续读socket...");
                 buffer.position(buffer.limit());
                 buffer.limit(buffer.capacity());
                 return -1;
             }
 
         } else {
-            Log.v(TAG, "包头长度未读完，继续读socket");
+            Log.v(TAG, "socket读取数据少于最低包头8字节，包头不完整，继续读socket...");
             buffer.position(buffer.limit());
             buffer.limit(buffer.capacity());
             return -1;

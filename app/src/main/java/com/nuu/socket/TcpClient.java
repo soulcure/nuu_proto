@@ -416,7 +416,7 @@ public class TcpClient extends PduUtil implements Runnable {
             while (socketChannel != null && socketChannel.isConnected()
                     && (socketChannel.read(receiveBuffer)) > 0) {
                 receiveBuffer.flip();
-                Log.v(TAG, "tcp read buffer");
+                Log.v(TAG, "tcp read buffer...");
                 while (ParsePdu(receiveBuffer) > 0) {
                     Log.v(TAG, "read while loop");
                 }
