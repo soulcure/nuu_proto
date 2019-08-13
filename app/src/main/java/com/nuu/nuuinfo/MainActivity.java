@@ -101,9 +101,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 reqForceReleaseSimCard();
                 break;
             case R.id.btn_des:
-                desTest();
-                //testRsa();
-                // testRsa1();
+                //desTest();
+                testRsa();
+                testRsa1();
+                testRsa2();
                 break;
         }
     }
@@ -432,13 +433,43 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
             String CryptTest = PduUtil.bytes2HexString(test);
 
-            Log.d(TAG, "共钥加密后字节数组内容:" + CryptTest);
+            Log.d(TAG, "公钥加密后字节数组内容:" + CryptTest);
 
             byte[] test1 = RSAProvider.decryptPrivateKey(test, privateKey);
             String decryptTest = PduUtil.bytes2HexString(test1);
 
-            Log.d(TAG, "公钥解密后字节数组内容:" + decryptTest);
-            Log.d(TAG, "公钥解密后字符串内容:" + new String(test1));
+            Log.d(TAG, "私钥解密后字节数组内容:" + decryptTest);
+            Log.d(TAG, "私钥解密后字符串内容:" + new String(test1));
+
+        } catch (Exception e) {
+            Log.e(TAG, "error" + e.getMessage());
+        }
+    }
+
+
+    private void testRsa2() {
+        Log.d(TAG, "测试RAS 私钥签名 公钥验签:");
+
+        String content = "ABCDEFG";
+        byte[] data = content.getBytes();
+
+        Log.d(TAG, "私钥签名前字符串内容:" + content);
+        Log.d(TAG, "私钥签名前字节数组内容:" + PduUtil.bytes2HexString(data));
+
+        try {
+
+            String publicKeyPath = Environment.getExternalStorageDirectory().getPath() + "/public.pem";
+            String publicKey = FileUtils.readString(new FileInputStream(publicKeyPath));
+
+            String privateKeyPath = Environment.getExternalStorageDirectory().getPath() + "/private.pem";
+            String privateKey = FileUtils.readString(new FileInputStream(privateKeyPath));
+
+            String test = RSAProvider.sign(data, privateKey);
+            Log.d(TAG, "私钥签名后内容:" + test);
+
+            boolean test1 = RSAProvider.verify(data, publicKey, test);
+
+            Log.d(TAG, "公钥验签结果:" + test1);
 
         } catch (Exception e) {
             Log.e(TAG, "error" + e.getMessage());
